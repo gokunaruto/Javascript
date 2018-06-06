@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>焦点左右轮播</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		img {
+			 display: block;
+		}
+		ul li {list-style: none;}
+		.container {
+			width: 300px;
+			height: 200px;
+			margin: 100px auto;
+			overflow: hidden;
+			position: relative;
+		}
+		ul {
+			width: 1800px;
+			position: relative;
+		}
+		ul li {
+			float: left;
+		}
+		.circle {
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.circle span {
+			margin: 3px;
+			width: 8px;
+			height: 8px;
+			display: inline-block;
+			border-radius: 50%;
+			background: #fff;
+		}
+		.circle span:hover {
+			background: #000;
+			cursor: pointer;
+		}
+		.circle span.on {
+			background: #000;
+		}
+		.next {
+			position: absolute;
+			top: 88px;
+			right: 10px;
+			font-size:20px;
+		}
+		.prev {
+			position: absolute;
+			top: 88px;
+			left: 10px;
+			font-size:20px;
+		}
+		.next, .prev:hover {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<ul style="left:-300px">
+			<li><img src="img/d.jpg" alt=""></li>
+			<li><img src="img/a.jpg" alt=""></li>
+			<li><img src="img/b.jpg" alt=""></li>
+			<li><img src="img/c.jpg" alt=""></li>
+			<li><img src="img/d.jpg" alt=""></li>
+			<li><img src="img/a.jpg" alt=""></li>
+		</ul>
+		<div class="circle">
+			<span class="on"></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<div class="next">></div>
+		<div class="prev"><</div>
+	</div>
+	<script>
+		var	container = document.querySelector('.container');
+			ul  = document.getElementsByTagName('ul')[0];
+			circle = document.querySelector('.circle');
+			span = circle.getElementsByTagName('span');
+			next = document.querySelector('.next');
+			prev = document.querySelector('.prev');
+		//左右箭头控制
+		next.onclick = function () {
+			next_f()
+		}
+		prev.onclick = function () {
+			prev_f()
+		}
+		function next_f () {
+			index ++;
+			if (index > 3) {
+				index = 0
+			}
+			circleChange();
+			var oLeft;
+			if (ul.style.left === '-1500px') {
+				oLeft = -600;
+			}else {
+				oLeft = parseInt(ul.style.left) - 300;
+			}
+			ul.style.left = oLeft + 'px';
+			
+		}
+		function prev_f () {
+			index --;
+			if (index < 0) {
+				index = 3;
+			}
+			circleChange();
+			var oLeft;
+			if (ul.style.left === '0px') {
+				oLeft = -900
+			}else {
+				oLeft = parseInt(ul.style.left) + 300
+			}
+			ul.style.left = oLeft + 'px';
+			
+		}
+		//圆点随着图片变换而变换
+		var index = 0;
+		function circleChange () {
+			for (var i = 0; i < span.length; i++) {
+				span[i].className = '' 
+			}
+			span[index].className = 'on'
+		}
+		//圆点点击
+		for (var i = 0; i < span.length; i++){
+		      (function(i){
+		        span[i].onclick = function () {
+		          var dis = index - i;
+		          if(index == 3 && parseInt(ul.style.left)!==-1500){
+		            dis = dis - 4;   
+		          }
+		          //和使用prev和next相同，在最开始的照片5和最终的照片1在使用时会出现问题，导致符号和位数的出错，做相应地处理即可
+		          if(index == 0 && parseInt(ul.style.left)!== -300){
+		            dis = 4 + dis;
+		          }
+		          ul.style.left = (parseInt(ul.style.left) + dis * 300)+"px";
+		          index = i;
+		          circleChange();
+		        }
+      })(i);      
+    }	
+		//自动轮播
+		var timer;
+		function autoplay () {
+			timer = setInterval(function () {
+				next_f()
+			}, 1000)
+		}
+		autoplay();
+
+		//停止
+		container.onmouseover = function () {
+			clearInterval(timer)
+		}
+		container.onmouseout = function () {
+			autoplay()
+		}
+
+		
+	</script>
+</body>
+</html>

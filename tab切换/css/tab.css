@@ -1,0 +1,18 @@
+.tab{width: 300px}
+.tab .tab-nav{
+	height: 30px
+}
+.tab .tab-nav li{
+	background-color: #767676;
+	float: left;
+	border-radius: 3px 3px 0 0;
+	margin-right: 5px;
+}
+.tab .tab-nav li a{
+	display: block;
+	height: 30px;
+	padding: 0 20px;
+	color: #fff;
+	line-height: 30px;
+	text-decoration: none
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tab选项卡</title>
+	<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/tab.css">
+	<style>
+	*{
+		margin: 0;
+		padding: 0
+	}
+	body{
+		background-color: #323232;font-size: 12px ; font-family: '微软雅黑';padding: 100px
+	}
+	ul li{
+		list-style: none
+	}
+	.tab{width: 300px;margin: 0 auto;}
+	.tab .nav{
+		height: 30px
+	}
+	.tab .nav li{
+		background-color: #767676;
+		float: left;
+		border-radius: 3px 3px 0 0;
+		margin-right: 5px;
+	}
+	.tab .nav li a{
+		display: block;
+		height: 30px;
+		padding: 0 20px;
+		color: #fff;
+		line-height: 30px;
+		text-decoration: none
+	}
+	.tab .nav li.active{
+		background-color: #fff;
+	}
+	.tab .nav li.active a{
+		color: #777
+	}
+	.tab .content{
+		background-color: #fff;
+		height: 200px;
+		padding: 5px
+	}
+	.tab .content .item{
+		display: none;
+		height: 200px;
+		overflow: hidden;
+	}
+	.tab .content .current{
+		display: block;
+	}
+</style>
+</head>
+<body>
+	<div class="tab">
+		<ul class="nav" id="nav">
+			<li class="active"><a href="">新闻</a></li>
+			<li><a href="">娱乐</a></li>
+			<li><a href="">电影</a></li>
+			<li><a href="">科技</a></li>
+		</ul>
+		<div class="content" id="content">
+			<div class="item current">
+				<img src="img/a.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/b.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/c.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/d.jpg" alt="">
+			</div>
+		</div>
+	</div>
+	<script>
+		/*
+			jq 实现
+	
+		$(function(){
+			$('.nav li').mouseover(function() {
+				var index = $(this).index();
+				$(this).addClass('active').siblings().removeClass('active');
+				$('.content .item').eq(index).show().siblings().hide();
+			})
+		})
+
+		*/
+	
+	
+		/*
+			js实现
+		 */
+		//封装一个函数，来获取id
+		 function $(id) {
+		 	return typeof id === 'string'?document.getElementById(id):id
+		 }
+		 window.onload = function () {
+		 	var titles = document.getElementsByTagName('li');
+		 		divs = $('content').getElementsByTagName('div');
+		 		if (titles.length != divs.length)
+		 			return;
+		 		//遍历titles下的所有li
+		 		for (var i = 0; i < titles.length; i++) {
+		 			titles[i].index = i;
+		 			titles[i].onmouseover = function () {
+		 				//这个循环清除所有active
+		 				for (var j = 0; j < titles.length; j++) {
+		 					titles[j].className = '';
+		 					divs[j].className = 'item';
+		 				}
+		 				//当前active
+		 				this.className = 'active';
+		 				divs[this.index].className = 'item current'
+		 			}
+		 		}
+		 }
+	</script>
+</body>
+</html>

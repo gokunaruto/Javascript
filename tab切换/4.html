@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tab选项卡-封装</title>
+	<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/tab.css">
+	<style>
+	*{
+		margin: 0;
+		padding: 0
+	}
+	body{
+		background-color: #323232;font-size: 12px ; font-family: '微软雅黑';padding: 100px
+	}
+	ul li{
+		list-style: none
+	}
+	.tab{width: 300px;margin: 0 auto;}
+	.tab .nav{
+		height: 30px
+	}
+	.tab .nav li{
+		background-color: #767676;
+		float: left;
+		border-radius: 3px 3px 0 0;
+		margin-right: 5px;
+	}
+	.tab .nav li a{
+		display: block;
+		height: 30px;
+		padding: 0 20px;
+		color: #fff;
+		line-height: 30px;
+		text-decoration: none
+	}
+	.tab .nav li.active{
+		background-color: #fff;
+	}
+	.tab .nav li.active a{
+		color: #777
+	}
+	.tab .content{
+		background-color: #fff;
+		height: 200px;
+		padding: 5px
+	}
+	.tab .content .item{
+		display: none;
+		height: 200px;
+		overflow: hidden;
+	}
+	.tab .content .current{
+		display: block;
+	}
+</style>
+</head>
+<body>
+	<div class="tab">
+		<ul class="nav" id="nav">
+			<li class="active"><a href="">新闻</a></li>
+			<li><a href="">娱乐</a></li>
+			<li><a href="">电影</a></li>
+			<li><a href="">科技</a></li>
+		</ul>
+		<div class="content" id="content">
+			<div class="item current">
+				<img src="img/a.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/b.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/c.jpg" alt="">
+			</div>
+			<div class="item">
+				<img src="img/d.jpg" alt="">
+			</div>
+		</div>
+	</div>
+	<script>
+		
+		/*
+			js实现
+		 */
+		//封装一个函数，来获取id
+		 function $(id) {
+		 	return typeof id === 'string'?document.getElementById(id):id
+		 }
+
+
+		window.onload = tab;
+		function tab() {
+			var titles = $('nav').getElementsByTagName('li');
+			var divs = $('content').getElementsByTagName('div');
+		
+			var index = 0;
+			var timer = null;
+			//主要部分,划过清除定时器，划出开启定时器
+			for (var i = 0; i < titles.length; i++) {
+				titles[i].id = i;
+				titles[i].onmouseover = function () {
+					clearInterval(timer);
+					changeOption(this.id);
+				}
+				titles[i].onmouseout = function () {
+					timer = setInterval(autoPlay,1000)
+				}
+			}
+
+			if(timer) {
+				clearInterval(timer);
+				timer = null;
+			}
+			//定时器
+			timer = setInterval(autoPlay,1000);
+			//自动切换函数
+			function autoPlay() {
+				index++;
+				if (index >= titles.length) {
+					index = 0
+				}
+				changeOption(index)
+			}
+			//切换函数
+			function changeOption(curIndex) {
+				for (var j = 0 ; j < titles.length; j++) {
+					titles[j].className = '';
+					divs[j].className = 'item'
+				}
+				titles[curIndex].className = 'active';
+				divs[curIndex].className = 'item current';
+				index = curIndex;
+			}
+		}
+	</script>
+</body>
+</html>

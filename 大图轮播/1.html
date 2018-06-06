@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>大图轮播</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0
+		}
+		#wrap {
+			width: 1226px;
+			height: 460px;
+			position: relative;
+			margin: 50px auto;
+		}
+		.banner {
+			position: absolute;
+			opacity: 0;
+			transition: opacity 2s;
+		}
+		.tab {
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+
+		}
+		.tab span {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			margin:3px;
+			background-color: #fff
+		}
+		.tab span:hover {
+			background-color: #000;
+			cursor: pointer;
+		}
+		.tab span.on {
+			background-color: #000
+		}
+		.prev {
+			position: absolute;
+			top: 215px;
+			left: 20px;
+			background: url(img/arrow.png) -37px -36px;
+			width: 30px;
+			height: 30px;
+		}
+		.prev:hover {
+			background:url(img/arrow.png) 0px -36px;
+			cursor: pointer;
+		}
+		.next {
+			position: absolute;
+			top: 215px;
+			right: 20px;
+			background: url(img/arrow.png) -37px 0px;
+			width: 30px;
+			height: 30px;
+		}
+		.next:hover {
+			background: url(img/arrow.png) 0px 0px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<div class="banner"><img src="img/1.jpg" width="1226" height="460" alt=""></div>
+		<div class="banner"><img src="img/2.jpg" width="1226" height="460" alt=""></div>
+		<div class="banner"><img src="img/3.jpg" width="1226" height="460" alt=""></div>
+		<div class="banner"><img src="img/4.jpg" width="1226" height="460" alt=""></div>
+		<div class="banner"><img src="img/5.jpg" width="1226" height="460" alt=""></div>
+		<div class="tab">
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<div class="prev"></div>
+		<div class="next"></div>
+	</div>
+
+	<script>
+		var oBody = document.getElementsByTagName('body')[0];
+			oPrev = document.getElementsByClassName('prev')[0];
+			oNext = document.getElementsByClassName('next')[0];
+			oBanner = document.getElementsByClassName('banner');
+			oSpan = document.getElementsByClassName('tab')[0].getElementsByTagName('span');
+			// 初始化第一张图片和第一个圆点 
+			oBanner[0].style.opacity = '1';
+			oSpan[0].className = 'on';
+
+			var num = 0;
+			var timer = null;
+			for (var i = 0; i < oSpan.length; i++) {
+				
+				oSpan[i]._index = i;//用自定义的一个_index属性来记住此时i的值
+
+				oSpan[i].onclick = function () {//点击小圆点切换
+					num = this._index;//将这个值赋值给全局变量num
+					for (var j = 0; j < oSpan.length; j++) {
+						oSpan[j].className = '';
+						oBanner[j].style.opacity = '0';
+					}
+					oSpan[num].className = 'on';
+					oBanner[num].style.opacity = '1';
+					
+				}
+
+				oNext.onclick = function () {
+					for (var j = 0; j < oSpan.length; j++) {
+						if (oSpan[j].className == 'on') {
+							oSpan[j].className = '';
+							oBanner[j].style.opacity = '0';
+							j++;
+							num++;
+							if (j > 4) {
+								j = 0;
+							}
+							oSpan[j].className = "on";
+							oBanner[j].style.opacity = "1";
+						}
+					}
+				}
+
+				oPrev.onclick = function () {
+					for (var j = 0; j < oSpan.length; j++) {
+						if (oSpan[j].className == 'on') {
+							oSpan[j].className = '';
+							oBanner[j].style.opacity = '0';
+							j--;
+							num--;
+							if (j < 0) {
+								j = 4;
+							}
+							oSpan[j].className = "on";
+							oBanner[j].style.opacity = "1";
+						}
+					}
+				}
+
+			}
+
+			function Time() {
+				num++;
+				if (num < 5) {
+					for (var j = 0; j < oSpan.length; j++) {
+						oSpan[j].className = '';
+						oBanner[j].style.opacity = '0';
+					}
+					oSpan[num].className = 'on';
+					oBanner[num].style.opacity = "1";
+				}else {
+					num = -1
+				}
+			}
+			clearInterval(timer);
+			var timer = setInterval('Time()', 1000)
+
+			oBody.onmouseover = function () {
+				clearInterval(timer)
+			}
+			oBody.onmouseout = function () {
+				clearInterval(timer);
+				timer = setInterval('Time()', 1000)
+			}
+	</script>
+</body>
+</html>

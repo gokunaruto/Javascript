@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播（设置opacity)</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		img {
+			 display: block;
+		}
+		ul li {list-style: none;}
+		.container {
+			width: 300px;
+			height: 200px;
+			margin: 100px auto;
+			overflow: hidden;
+			position: relative;
+		}
+		ul {
+			position: relative;
+		}
+		ul li {
+			position: absolute;
+			top: 0;
+			left: 0;
+			opacity: 0
+		}
+		.circle {
+			z-index: 100;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.circle span {
+			margin: 3px;
+			width: 8px;
+			height: 8px;
+			display: inline-block;
+			border-radius: 50%;
+			background: #fff;
+		}
+		.circle span:hover {
+			background: #000;
+			cursor: pointer;
+		}
+		.circle span.on {
+			background: #000;
+		}
+		.next {
+			position: absolute;
+			top: 88px;
+			right: 10px;
+			font-size:20px;
+		}
+		.prev {
+			position: absolute;
+			top: 88px;
+			left: 10px;
+			font-size:20px;
+		}
+		.next, .prev:hover {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<ul>
+			
+			<li><img src="img/a.jpg" alt=""></li>
+			<li><img src="img/b.jpg" alt=""></li>
+			<li><img src="img/c.jpg" alt=""></li>
+			<li><img src="img/d.jpg" alt=""></li>
+		</ul>	
+		<div class="circle">
+			<span class="on"></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<div class="next">></div>
+		<div class="prev"><</div>
+	</div>
+	<script>
+		var	container = document.querySelector('.container');
+			ul  = document.getElementsByTagName('ul')[0];
+			li = ul.getElementsByTagName('li');
+			circle = document.querySelector('.circle');
+			span = circle.getElementsByTagName('span');
+			next = document.querySelector('.next');
+			prev = document.querySelector('.prev');
+		
+		var timer = null;
+		var index = 0;
+		li[0].style.opacity = '1';
+		span[0].className = 'on';
+
+		for (var i = 0; i < span.length; i++) {
+			span[i].id = i;
+			span[i].onclick = function () {
+				for (var j = 0; j < span.length; j++) {
+					span[j].className = '';
+					li[j].style.opacity = '0'
+				}
+				index = this.id;
+				span[index].className = 'on';
+				li[index].style.opacity = '1'
+			}
+			
+		}
+
+
+		next.onclick = function () {
+			next_fn()
+		}
+		prev.onclick = function () {
+			prev_fn()
+		}
+		function next_fn() {
+			for (var i = 0; i < span.length; i++) {
+				if (span[i].className == 'on') {
+					span[i].className = '';
+					li[i].style.opacity = '0'
+					i++;
+					index++;
+					if (i > 3) {
+						i = 0
+					}
+					span[i].className = 'on';
+					li[i].style.opacity = '1'
+				}
+			}
+		}
+		
+		function prev_fn () {
+			for (var i = 0; i < span.length; i++) {
+				if (span[i].className == 'on') {
+					span[i].className = '';
+					li[i].style.opacity = '0';
+					i--;
+					index--;
+					if (i < 0) {
+						i = 3
+					}
+					span[i].className = 'on';
+					li[i].style.opacity = '1'
+				}
+			}
+		}
+
+		function play() {
+			index++;
+			if (index < 4) {
+				for (var i = 0; i < span.length; i++) {
+					span[i].className = '';
+					li[i].style.opacity = '0';
+				}
+				span[index].className = 'on';
+				li[index].style.opacity = '1'
+			}
+			else {
+				index = -1
+			}
+		}
+
+		timer = setInterval(play, 1000);
+		container.onmouseover = function () {
+			clearInterval(timer)
+		}
+		container.onmouseout = function () {
+			timer = setInterval(play, 1000)
+		}
+	</script>
+</body>
+</html>
